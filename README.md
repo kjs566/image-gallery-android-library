@@ -8,7 +8,7 @@
 
 ## How to use
 ### Instalation
-Unforunatelly I currently don't own any archives hosting, so you have to get the library from this repository.
+Unforunatelly I currently don't own any artifacts hosting, so you have to get the library from this repository.
 1. Cloning into your projects root file.
 > git clone -b "v0.1.0" --single-branch --depth 1 https://github.com/kjs566/image-gallery-android-library.git imagegallery
 2. Adding it as a dependency for your project in app/build.gradle -> dependencies
