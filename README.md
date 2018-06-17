@@ -107,6 +107,17 @@ API 16+ (Android 4.1+)
 
 ## TODO LIST
 
+Status | Title | Description
+------ | ----- | -----------
+[x] | Basic implementation | Basic slider with swipable image list loading from URLs or Drawable Resources
+[] | Placeholder when loading with customization | 
+[] | Adapters for other loading methods - Bitmap, File, byte[] |
+[] | Easier usage of IGDetailView | Create helping methods with automatic adapters creation, allow setting of images (URLs or Resources) from XML.
+[] | Previews of images | (Optional) Bottom of the screen with multiple images preview, current in the center.
+[] | Grid of images preview | 
+[] | Animated hiding of buttons and previews | 
+
+
 ## Licence
 
 The project is licensed under the GNU General Public License v3.0.
