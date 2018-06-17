@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#00ffffff</color>
+    <color name="black">#000000</color>
+    <color name="ig_btn_background">@color/transparent</color>
+    <color name="ig_detail_image_background">@color/black</color>
+</resources>

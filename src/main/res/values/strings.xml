@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ImageGallery</string>
+    <string name="back">Back</string>
+    <string name="share">Share</string>
 </resources>

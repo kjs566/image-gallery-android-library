@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="IGDetailView">
+        <attr name="urisArray" format="reference" />
+        <attr name="resArray" format="reference" />
+    </declare-styleable>
+</resources>
