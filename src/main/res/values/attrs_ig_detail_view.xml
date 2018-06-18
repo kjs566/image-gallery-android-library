@@ -2,5 +2,8 @@
     <declare-styleable name="IGDetailView">
         <attr name="urisArray" format="reference" />
         <attr name="resArray" format="reference" />
+        <attr name="placeholder" format="reference" />
+        <attr name="error" format="reference"/>
+        <attr name="fallback" format="reference"/>
     </declare-styleable>
 </resources>

@@ -8,11 +8,16 @@ import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import com.bumptech.glide.request.RequestOptions;
 import com.kjs566.imagegallery.R;
 import com.kjs566.imagegallery.adapters.IGBaseAdapter;
+import com.kjs566.imagegallery.adapters.IGImageResourcesAdapter;
+import com.kjs566.imagegallery.adapters.IGStringUrisAdapter;
+import com.kjs566.imagegallery.adapters.IGUrisAdapter;
 
 public class IGDetailView extends RecyclerView{
     private IGBaseAdapter mAdapter;
+    private RequestOptions mRequestOptions;
 
     public IGDetailView(Context context) {
         super(context);
@@ -36,6 +41,26 @@ public class IGDetailView extends RecyclerView{
             final TypedArray a = getContext().obtainStyledAttributes(
                     attrs, R.styleable.IGDetailView, defStyle, 0);
 
+            this.mRequestOptions = new RequestOptions()
+                    .placeholder(a.getResourceId(R.styleable.IGDetailView_placeholder, R.drawable.ig_placeholder))
+                    .error(a.getResourceId(R.styleable.IGDetailView_error, R.drawable.ig_error))
+                    .fallback(a.getResourceId(R.styleable.IGDetailView_fallback, R.drawable.ig_fallback));
+
+            if(a.hasValue(R.styleable.IGDetailView_urisArray)){
+                IGStringUrisAdapter adapter = new IGStringUrisAdapter(mRequestOptions);
+
+                int arrayRes = a.getResourceId(R.styleable.IGDetailView_urisArray, -1);
+                adapter.setStringUris(getResources().getStringArray(arrayRes));
+                setImagesAdapter(adapter);
+            }
+            if(a.hasValue(R.styleable.IGDetailView_resArray)){
+                IGImageResourcesAdapter adapter = new IGImageResourcesAdapter(mRequestOptions);
+
+                int arrayRes = a.getResourceId(R.styleable.IGDetailView_resArray, -1);
+                adapter.setResources(getResources().getIntArray(arrayRes));
+                setImagesAdapter(adapter);
+
+            }
             a.recycle();
         }
 
