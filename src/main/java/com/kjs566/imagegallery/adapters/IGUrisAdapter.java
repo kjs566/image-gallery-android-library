@@ -6,12 +6,17 @@ import android.support.annotation.NonNull;
 
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 import com.kjs566.imagegallery.ui.IGDetailItemViewHolder;
 
 import java.util.List;
 
 public class IGUrisAdapter extends IGBaseAdapter {
     protected Uri[] mUrisArray;
+
+    public IGUrisAdapter(RequestOptions requestOptions) {
+        super(requestOptions);
+    }
 
     public void setUris(List<Uri> uris){
         setUris(uris.toArray(mUrisArray));

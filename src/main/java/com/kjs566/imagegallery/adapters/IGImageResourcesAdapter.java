@@ -6,9 +6,14 @@ import android.support.annotation.DrawableRes;
 
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 
 public class IGImageResourcesAdapter extends IGBaseAdapter{
     @DrawableRes protected  int[] mResources;
+
+    public IGImageResourcesAdapter(RequestOptions requestOptions) {
+        super(requestOptions);
+    }
 
     public void setResources(@DrawableRes int[] resources){
         this.mResources = resources;

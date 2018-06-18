@@ -4,9 +4,14 @@ import android.graphics.drawable.Drawable;
 
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 
 public class IGStringUrisAdapter extends IGBaseAdapter{
     protected String[] mStringUris;
+
+    public IGStringUrisAdapter(RequestOptions requestOptions) {
+        super(requestOptions);
+    }
 
     public void setStringUris(String[] mStringUris) {
         this.mStringUris = mStringUris;

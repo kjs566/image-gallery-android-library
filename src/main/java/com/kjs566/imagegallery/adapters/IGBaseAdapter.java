@@ -11,10 +11,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
+import com.kjs566.imagegallery.GlideApp;
 import com.kjs566.imagegallery.R;
 import com.kjs566.imagegallery.ui.IGDetailItemViewHolder;
 
 public abstract class IGBaseAdapter extends RecyclerView.Adapter<IGDetailItemViewHolder>{
+    private final RequestOptions mRequestOptions;
+
+    public IGBaseAdapter(RequestOptions requestOptions){
+        this.mRequestOptions = requestOptions;
+    }
 
     @NonNull
     @Override
@@ -24,7 +31,7 @@ public abstract class IGBaseAdapter extends RecyclerView.Adapter<IGDetailItemVie
 
     @Override
     public void onBindViewHolder(@NonNull IGDetailItemViewHolder holder, int position) {
-        loadImage(Glide.with(holder.itemView), position).into(holder.getImageView());
+        loadImage(GlideApp.with(holder.itemView), position).apply(mRequestOptions).into(holder.getImageView());
     }
 
     protected abstract RequestBuilder<Drawable> loadImage(RequestManager manager, int itemPosition);

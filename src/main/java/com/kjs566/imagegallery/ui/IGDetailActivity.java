@@ -2,46 +2,69 @@ package com.kjs566.imagegallery.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.SyncStateContract;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.IdRes;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.bumptech.glide.request.RequestOptions;
+import com.kjs566.imagegallery.IGConstants;
 import com.kjs566.imagegallery.R;
 import com.kjs566.imagegallery.adapters.IGBaseAdapter;
 import com.kjs566.imagegallery.adapters.IGImageResourcesAdapter;
 import com.kjs566.imagegallery.adapters.IGStringUrisAdapter;
 
 public class IGDetailActivity extends AppCompatActivity implements View.OnClickListener {
-    public static final String IMAGE_RESOURCES_ARRAY_EXTRA_KEY = "imageResources";
-    public static final String IMAGE_STRING_URIS_ARRAY_EXTRA_KEY = "imageUris";
 
     private static final String TAG = IGDetailActivity.class.getSimpleName();
 
     protected IGBaseAdapter mAdapter;
     private IGDetailView mGalleryView;
 
-    public static Intent createIntent(Context context, String... imageStringUris){
+    private static Intent createBaseIntent(Context context, @Nullable Integer placeholderResource, @Nullable Integer errorResource){
         Intent intent = new Intent(context, IGDetailActivity.class);
-        intent.putExtra(IMAGE_STRING_URIS_ARRAY_EXTRA_KEY, imageStringUris);
+        if(placeholderResource != null){
+            intent.putExtra(IGConstants.PLACEHOLDER_RESOURCE_EXTRA_KEY, placeholderResource);
+        }
+        if(errorResource != null){
+            intent.putExtra(IGConstants.ERROR_RESOURCE_EXTRA_KEY, errorResource);
+        }
+
         return intent;
     }
 
-    public static Intent createIntent(Context context, @DrawableRes int... imageResources){
-        Intent intent = new Intent(context, IGDetailActivity.class);
-        intent.putExtra(IMAGE_RESOURCES_ARRAY_EXTRA_KEY, imageResources);
+    public static Intent createIntent(Context context, Integer placeholderResource, Integer errorResource, String[] imageStringUris){
+        Intent intent = createBaseIntent(context, placeholderResource, errorResource);
+        intent.putExtra(IGConstants.IMAGE_STRING_URIS_ARRAY_EXTRA_KEY, imageStringUris);
         return intent;
+    }
+
+    public static Intent createIntent(Context context, Integer placeholderResource, Integer errorResource, @DrawableRes int[] imageResources) {
+        Intent intent = createBaseIntent(context, placeholderResource, errorResource);
+        intent.putExtra(IGConstants.IMAGE_RESOURCES_ARRAY_EXTRA_KEY, imageResources);
+        return intent;
+    }
+
+    public static void startActivity(Context context, @DrawableRes int placeholderResource, int errorResource, @DrawableRes int[] imageResources){
+        Intent intent = createIntent(context, placeholderResource, errorResource, imageResources);
+        context.startActivity(intent);
     }
 
     public static void startActivity(Context context, @DrawableRes int... imageResources){
-        Intent intent = createIntent(context, imageResources);
+        Intent intent = createIntent(context, null, null, imageResources);
+        context.startActivity(intent);
+    }
+
+    public static void startActivity(Context context, @DrawableRes int placeholderResource, int errorResource, String[] imageStringUris){
+        Intent intent = createIntent(context, placeholderResource, errorResource, imageStringUris);
         context.startActivity(intent);
     }
 
     public static void startActivity(Context context, String... imageStringUris){
-        Intent intent = createIntent(context, imageStringUris);
+        Intent intent = createIntent(context, null, null, imageStringUris);
         context.startActivity(intent);
     }
 
@@ -54,15 +77,17 @@ public class IGDetailActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.ig_btn_back).setOnClickListener(this);
         findViewById(R.id.ig_btn_share).setOnClickListener(this);
 
-        final int[] resourcesArray = getIntent().getIntArrayExtra(IMAGE_RESOURCES_ARRAY_EXTRA_KEY);
+        RequestOptions requestOptions = retrieveRequestOptions(getIntent());
+
+        final int[] resourcesArray = getIntent().getIntArrayExtra(IGConstants.IMAGE_RESOURCES_ARRAY_EXTRA_KEY);
         if(resourcesArray != null){
-            IGImageResourcesAdapter a = new IGImageResourcesAdapter();
+            IGImageResourcesAdapter a = new IGImageResourcesAdapter(requestOptions);
             a.setResources(resourcesArray);
             mAdapter = a;
         }else {
-            final String[] urisArray = getIntent().getStringArrayExtra(IMAGE_STRING_URIS_ARRAY_EXTRA_KEY);
+            final String[] urisArray = getIntent().getStringArrayExtra(IGConstants.IMAGE_STRING_URIS_ARRAY_EXTRA_KEY);
             if (urisArray != null){
-                IGStringUrisAdapter a = new IGStringUrisAdapter();
+                IGStringUrisAdapter a = new IGStringUrisAdapter(requestOptions);
                 a.setStringUris(urisArray);
                 mAdapter = a;
             }
@@ -73,6 +98,17 @@ public class IGDetailActivity extends AppCompatActivity implements View.OnClickL
         }else{
             mGalleryView.setImagesAdapter(mAdapter);
         }
+    }
+
+    protected RequestOptions retrieveRequestOptions(Intent intent){
+        @DrawableRes int placeholder = intent.getIntExtra(IGConstants.PLACEHOLDER_RESOURCE_EXTRA_KEY, R.drawable.ig_placeholder);
+        @DrawableRes int error = intent.getIntExtra(IGConstants.ERROR_RESOURCE_EXTRA_KEY, R.drawable.ig_error);
+        @DrawableRes int fallback = intent.getIntExtra(IGConstants.FALLBACK_RESOURCE_EXTRA_KEY, R.drawable.ig_fallback);
+
+        return new RequestOptions()
+                .placeholder(placeholder)
+                .error(error)
+                .fallback(fallback);
     }
 
     protected void shareCurrentImage(){
