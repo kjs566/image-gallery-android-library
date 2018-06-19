@@ -7,6 +7,7 @@ import android.support.annotation.DrawableRes;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.kjs566.imagegallery.GlideLoadable;
 
 public class IGImageResourcesAdapter extends IGBaseAdapter{
     @DrawableRes protected  int[] mResources;
@@ -21,8 +22,8 @@ public class IGImageResourcesAdapter extends IGBaseAdapter{
     }
 
     @Override
-    protected RequestBuilder<Drawable> loadImage(RequestManager manager, int itemPosition) {
-        return manager.load(mResources[itemPosition]);
+    public GlideLoadable createGlideLoadable(int itemPosition) {
+        return GlideLoadable.fromResource(mResources[itemPosition]);
     }
 
     @Override

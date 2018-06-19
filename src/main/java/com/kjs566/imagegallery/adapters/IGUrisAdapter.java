@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.kjs566.imagegallery.GlideLoadable;
 import com.kjs566.imagegallery.ui.IGDetailItemViewHolder;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class IGUrisAdapter extends IGBaseAdapter {
     }
 
     @Override
-    protected RequestBuilder<Drawable> loadImage(RequestManager manager, int itemPosition) {
-        return manager.load(mUrisArray[itemPosition]);
+    public GlideLoadable createGlideLoadable(int itemPosition) {
+        return GlideLoadable.fromUri(mUrisArray[itemPosition]);
     }
 }

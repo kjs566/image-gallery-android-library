@@ -9,11 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.kjs566.imagegallery.IGUtils;
 import com.kjs566.imagegallery.R;
 import com.kjs566.imagegallery.adapters.IGBaseAdapter;
 import com.kjs566.imagegallery.adapters.IGImageResourcesAdapter;
 import com.kjs566.imagegallery.adapters.IGStringUrisAdapter;
-import com.kjs566.imagegallery.adapters.IGUrisAdapter;
 
 public class IGDetailView extends RecyclerView{
     private IGBaseAdapter mAdapter;
@@ -41,7 +41,7 @@ public class IGDetailView extends RecyclerView{
             final TypedArray a = getContext().obtainStyledAttributes(
                     attrs, R.styleable.IGDetailView, defStyle, 0);
 
-            this.mRequestOptions = new RequestOptions()
+            this.mRequestOptions = IGUtils.createDefaultRequestOptions()
                     .placeholder(a.getResourceId(R.styleable.IGDetailView_placeholder, R.drawable.ig_placeholder))
                     .error(a.getResourceId(R.styleable.IGDetailView_error, R.drawable.ig_error))
                     .fallback(a.getResourceId(R.styleable.IGDetailView_fallback, R.drawable.ig_fallback));
@@ -71,5 +71,17 @@ public class IGDetailView extends RecyclerView{
     public void setImagesAdapter(IGBaseAdapter adapter){
         mAdapter = adapter;
         this.setAdapter(mAdapter);
+    }
+
+    public IGBaseAdapter getImagesAdapter(){
+        return mAdapter;
+    }
+
+    public int getCurrentItemPosition(){
+        final LayoutManager layoutManager = getLayoutManager();
+        if(layoutManager != null && layoutManager instanceof LinearLayoutManager){
+            return ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
+        }
+        throw new UnsupportedOperationException("Only LinearLayoutManager supports this operation");
     }
 }
