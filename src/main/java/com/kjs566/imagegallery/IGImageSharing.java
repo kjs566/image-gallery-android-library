@@ -19,7 +19,7 @@ public class IGImageSharing {
         return new IGImageSharing(context);
     }
 
-    private IGImageSharing(Context context){
+    public IGImageSharing(Context context){
         this.mContext = new WeakReference<>(context);
     }
 
@@ -38,7 +38,7 @@ public class IGImageSharing {
     }
 
     /**
-     * Saves the image as PNG with async task and runs sharing
+     * Saves the image as PNG from async task and runs sharing
      * @param image Bitmap to save.
      */
     public void saveAndShareImage(Bitmap image) {
