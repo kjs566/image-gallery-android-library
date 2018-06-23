@@ -10,7 +10,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 
 public class IGImageSharing {
-    public static final String DEFAULT_SHARING_FILE_NAME = "shared_image.png";
+    public static final String DEFAULT_SHARING_FILE_NAME = "shared_image.jpeg";
 
     private WeakReference<Context> mContext;
     private IGSaveBitmapAsyncTask mSavingTask;
@@ -38,7 +38,7 @@ public class IGImageSharing {
     }
 
     /**
-     * Saves the image as PNG from async task and runs sharing
+     * Saves the image as JPEG from async task and runs sharing
      * @param image Bitmap to save.
      */
     public void saveAndShareImage(Bitmap image) {
@@ -78,14 +78,14 @@ public class IGImageSharing {
     }
 
     /**
-     * Shares the PNG image from Uri.
+     * Shares the JPEG image from Uri.
      * @param uri Uri of image to share.
      */
     public void shareImageUri(Uri uri){
         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.setType("image/png");
+        intent.setType("image/jpeg");
         Context context = mContext.get();
         if(context != null) {
             context.startActivity(intent);

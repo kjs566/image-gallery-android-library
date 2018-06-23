@@ -37,7 +37,7 @@ public class IGSaveBitmapAsyncTask extends AsyncTask<Bitmap, Void, Uri>{
             Uri uri = null;
             try {
                 FileOutputStream stream = new FileOutputStream(mFileToSave);
-                image.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                image.compress(Bitmap.CompressFormat.JPEG, 90, stream);
                 stream.flush();
                 stream.close();
                 uri = FileProvider.getUriForFile(context, "com.kjs566.fileprovider", mFileToSave);
