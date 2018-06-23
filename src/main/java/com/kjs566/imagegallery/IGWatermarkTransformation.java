@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 
@@ -42,7 +43,9 @@ public class IGWatermarkTransformation extends BitmapTransformation{
 
 
         Bitmap watermark = BitmapFactory.decodeResource(context.getResources(), mWatermarkRes);
-        canvas.drawBitmap(watermark, 0, 0, null);
+        Paint paint = new Paint();
+        paint.setAlpha(70);
+        canvas.drawBitmap(watermark, 0, 0, paint);
 
         return result;
     }

@@ -11,11 +11,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
-import com.kjs566.imagegallery.GlideApp;
 import com.kjs566.imagegallery.IGConstants;
 import com.kjs566.imagegallery.IGImageSharing;
 import com.kjs566.imagegallery.IGUtils;
@@ -92,7 +92,7 @@ public class IGDetailActivity extends AppCompatActivity implements View.OnClickL
                                     .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                                     .transform(mWatermarkTransformation);
 
-        mGalleryView.getImagesAdapter().createGlideLoadable(position).loadIntoAsBitmap(GlideApp.with(this).asBitmap().apply(options)).into(new SimpleTarget<Bitmap>(){
+        mGalleryView.getImagesAdapter().createGlideLoadable(position).loadIntoAsBitmap(Glide.with(this).asBitmap().apply(options)).into(new SimpleTarget<Bitmap>(){
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 if(mImageSharing == null){
