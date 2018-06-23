@@ -46,6 +46,15 @@ public class IGDetailView extends RecyclerView{
                     .error(a.getResourceId(R.styleable.IGDetailView_error, R.drawable.ig_error))
                     .fallback(a.getResourceId(R.styleable.IGDetailView_fallback, R.drawable.ig_fallback));
 
+            if(a.hasValue(R.styleable.IGDetailView_loading)){
+                int res = a.getResourceId(R.styleable.IGDetailView_loading, -1);
+                if(res != -1){
+
+                }
+            }else{
+
+            }
+
             if(a.hasValue(R.styleable.IGDetailView_urisArray)){
                 IGStringUrisAdapter adapter = new IGStringUrisAdapter(mRequestOptions);
 
@@ -61,6 +70,8 @@ public class IGDetailView extends RecyclerView{
                 setImagesAdapter(adapter);
 
             }
+
+
             a.recycle();
         }
 

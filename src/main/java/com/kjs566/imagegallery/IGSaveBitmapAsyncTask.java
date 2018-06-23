@@ -19,10 +19,12 @@ public class IGSaveBitmapAsyncTask extends AsyncTask<Bitmap, Void, Uri>{
 
     private WeakReference<Context> mContextReference;
     private WeakReference<OnImageSavedListener> mListener;
+    private final File mFileToSave;
 
-    public IGSaveBitmapAsyncTask(Context context, OnImageSavedListener listener){
+    public IGSaveBitmapAsyncTask(Context context, File fileToSave, OnImageSavedListener listener){
         this.mContextReference = new WeakReference<>(context);
         this.mListener = new WeakReference<>(listener);
+        this.mFileToSave = fileToSave;
     }
 
     @Override
@@ -32,17 +34,13 @@ public class IGSaveBitmapAsyncTask extends AsyncTask<Bitmap, Void, Uri>{
             return null;
         if(bitmaps.length == 1){
             Bitmap image = bitmaps[0];
-            File imagesFolder = new File(context.getCacheDir(), "images");
             Uri uri = null;
             try {
-                imagesFolder.mkdirs();
-                File file = new File(imagesFolder, "shared_image.png");
-
-                FileOutputStream stream = new FileOutputStream(file);
+                FileOutputStream stream = new FileOutputStream(mFileToSave);
                 image.compress(Bitmap.CompressFormat.PNG, 90, stream);
                 stream.flush();
                 stream.close();
-                uri = FileProvider.getUriForFile(context, "com.kjs566.fileprovider", file);
+                uri = FileProvider.getUriForFile(context, "com.kjs566.fileprovider", mFileToSave);
 
             } catch (IOException e) {
                 Log.d(TAG, "IOException while trying to write file for sharing: " + e.getMessage());

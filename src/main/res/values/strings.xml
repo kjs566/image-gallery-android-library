@@ -2,4 +2,6 @@
     <string name="app_name">ImageGallery</string>
     <string name="back">Back</string>
     <string name="share">Share</string>
+    <string name="loading">Loading</string>
+    <string name="pick_or_take_image">Pick or take image</string>
 </resources>

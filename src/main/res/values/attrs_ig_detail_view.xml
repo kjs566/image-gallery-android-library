@@ -5,5 +5,6 @@
         <attr name="placeholder" format="reference" />
         <attr name="error" format="reference"/>
         <attr name="fallback" format="reference"/>
+        <attr name="loading" format="reference"/>
     </declare-styleable>
 </resources>

@@ -18,6 +18,7 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.kjs566.imagegallery.GlideApp;
 import com.kjs566.imagegallery.IGConstants;
+import com.kjs566.imagegallery.IGImageSharing;
 import com.kjs566.imagegallery.IGSaveBitmapAsyncTask;
 import com.kjs566.imagegallery.IGUtils;
 import com.kjs566.imagegallery.R;
@@ -31,7 +32,7 @@ public class IGDetailActivity extends AppCompatActivity implements View.OnClickL
 
     protected IGBaseAdapter mAdapter;
     private IGDetailView mGalleryView;
-    private IGSaveBitmapAsyncTask mSavingTask;
+    private IGImageSharing mImageSharing;
 
     private static Intent createBaseIntent(Context context, @Nullable Integer placeholderResource, @Nullable Integer errorResource){
         Intent intent = new Intent(context, IGDetailActivity.class);
@@ -129,60 +130,23 @@ public class IGDetailActivity extends AppCompatActivity implements View.OnClickL
         mGalleryView.getImagesAdapter().createGlideLoadable(position).loadIntoAsBitmap(GlideApp.with(this).asBitmap().apply(options)).into(new SimpleTarget<Bitmap>(){
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                saveAndShareImage(resource);
+                if(mImageSharing == null){
+                    mImageSharing = IGImageSharing.with(IGDetailActivity.this);
+                }
+                mImageSharing.saveAndShareImage(resource);
             }
         });
-    }
-
-    /**
-     * Saves the image as PNG with async task and runs sharing
-     * @param image Bitmap to save.
-     *
-     */
-    private void saveAndShareImage(Bitmap image) {
-        if(image == null)
-            return;
-
-        cleanupSavingTask();
-
-        mSavingTask = new IGSaveBitmapAsyncTask(this, new IGSaveBitmapAsyncTask.OnImageSavedListener() {
-            @Override
-            public void onImageSaved(Uri uri) {
-                shareImageUri(uri);
-            }
-
-            @Override
-            public void onImageSavingFailed() {
-            }
-        });
-        mSavingTask.execute(image);
-
-    }
-
-    protected void cleanupSavingTask(){
-        if(mSavingTask != null){
-            mSavingTask.cleanUp();
-            mSavingTask = null;
-        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        cleanupSavingTask();
+        if(mImageSharing != null) {
+            mImageSharing.cleanup();
+        }
     }
 
-    /**
-     * Shares the PNG image from Uri.
-     * @param uri Uri of image to share.
-     */
-    private void shareImageUri(Uri uri){
-        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.setType("image/png");
-        startActivity(intent);
-    }
+
 
     @Override
     public void onClick(View view) {
