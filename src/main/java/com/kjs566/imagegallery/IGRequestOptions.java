@@ -57,19 +57,19 @@ public class IGRequestOptions extends RequestOptions{
         return (IGRequestOptions) super.fallback(drawable);
     }
 
-    public IGRequestOptions loading(@DrawableRes int resourceId){
+    public IGRequestOptions loadingIndicator(@DrawableRes int resourceId){
         this.mLoadingRes = resourceId;
         if(isAutoCloneEnabled()){
-            return clone().loading(resourceId);
+            return clone().loadingIndicator(resourceId);
         }
         this.mLoadingRes = resourceId;
         return this;
     }
 
-    public IGRequestOptions loading(Drawable drawable){
+    public IGRequestOptions loadingIndicator(Drawable drawable){
         this.mLoadingDrawable = drawable;
         if(isAutoCloneEnabled()){
-            return clone().loading(drawable);
+            return clone().loadingIndicator(drawable);
         }
 
         this.mLoadingDrawable = drawable;

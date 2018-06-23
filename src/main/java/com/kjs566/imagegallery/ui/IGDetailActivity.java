@@ -3,7 +3,6 @@ package com.kjs566.imagegallery.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,8 +18,8 @@ import com.bumptech.glide.request.transition.Transition;
 import com.kjs566.imagegallery.GlideApp;
 import com.kjs566.imagegallery.IGConstants;
 import com.kjs566.imagegallery.IGImageSharing;
-import com.kjs566.imagegallery.IGSaveBitmapAsyncTask;
 import com.kjs566.imagegallery.IGUtils;
+import com.kjs566.imagegallery.IGWatermarkTransformation;
 import com.kjs566.imagegallery.R;
 import com.kjs566.imagegallery.adapters.IGBaseAdapter;
 import com.kjs566.imagegallery.adapters.IGImageResourcesAdapter;
@@ -33,50 +32,10 @@ public class IGDetailActivity extends AppCompatActivity implements View.OnClickL
     protected IGBaseAdapter mAdapter;
     private IGDetailView mGalleryView;
     private IGImageSharing mImageSharing;
+    private @DrawableRes int mWatermarkRes;
 
-    private static Intent createBaseIntent(Context context, @Nullable Integer placeholderResource, @Nullable Integer errorResource){
-        Intent intent = new Intent(context, IGDetailActivity.class);
-        if(placeholderResource != null){
-            intent.putExtra(IGConstants.PLACEHOLDER_RESOURCE_EXTRA_KEY, placeholderResource);
-        }
-        if(errorResource != null){
-            intent.putExtra(IGConstants.ERROR_RESOURCE_EXTRA_KEY, errorResource);
-        }
-
-        return intent;
-    }
-
-    public static Intent createIntent(Context context, Integer placeholderResource, Integer errorResource, String[] imageStringUris){
-        Intent intent = createBaseIntent(context, placeholderResource, errorResource);
-        intent.putExtra(IGConstants.IMAGE_STRING_URIS_ARRAY_EXTRA_KEY, imageStringUris);
-        return intent;
-    }
-
-    public static Intent createIntent(Context context, Integer placeholderResource, Integer errorResource, @DrawableRes int[] imageResources) {
-        Intent intent = createBaseIntent(context, placeholderResource, errorResource);
-        intent.putExtra(IGConstants.IMAGE_RESOURCES_ARRAY_EXTRA_KEY, imageResources);
-        return intent;
-    }
-
-    public static void startActivity(Context context, @DrawableRes int placeholderResource, int errorResource, @DrawableRes int[] imageResources){
-        Intent intent = createIntent(context, placeholderResource, errorResource, imageResources);
-        context.startActivity(intent);
-    }
-
-    public static void startActivity(Context context, @DrawableRes int... imageResources){
-        Intent intent = createIntent(context, null, null, imageResources);
-        context.startActivity(intent);
-    }
-
-    public static void startActivity(Context context, @DrawableRes int placeholderResource, int errorResource, String[] imageStringUris){
-        Intent intent = createIntent(context, placeholderResource, errorResource, imageStringUris);
-        context.startActivity(intent);
-    }
-
-    public static void startActivity(Context context, String... imageStringUris){
-        Intent intent = createIntent(context, null, null, imageStringUris);
-        context.startActivity(intent);
-    }
+    private IGWatermarkTransformation mWatermarkTransformation;
+    private int mLoadingIndicatorResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +62,10 @@ public class IGDetailActivity extends AppCompatActivity implements View.OnClickL
             }
         }
 
+        mWatermarkRes = getIntent().getIntExtra(IGConstants.SHARING_WATERMARK_RESOURCE_EXTRA_KEY, -1);
+        mWatermarkTransformation = new IGWatermarkTransformation(this, mWatermarkRes);
+
+
         if(mAdapter == null){
             Log.w(TAG, "No images set");
         }else{
@@ -112,20 +75,22 @@ public class IGDetailActivity extends AppCompatActivity implements View.OnClickL
 
     protected RequestOptions retrieveRequestOptions(Intent intent){
         @DrawableRes int placeholder = intent.getIntExtra(IGConstants.PLACEHOLDER_RESOURCE_EXTRA_KEY, R.drawable.ig_placeholder);
-        @DrawableRes int error = intent.getIntExtra(IGConstants.ERROR_RESOURCE_EXTRA_KEY, R.drawable.ig_error);
+        @DrawableRes int error = intent.getIntExtra(IGConstants.ERROR_PLACEHOLDER_RESOURCE_EXTRA_KEY, R.drawable.ig_error);
         @DrawableRes int fallback = intent.getIntExtra(IGConstants.FALLBACK_RESOURCE_EXTRA_KEY, R.drawable.ig_fallback);
+        @DrawableRes int loadingIndicator = intent.getIntExtra(IGConstants.LOADING_INDICATOR_RESOURCE_EXTRA_KEY, R.drawable.ig_loading_indicator);
 
         return IGUtils.createDefaultRequestOptions()
                 .placeholder(placeholder)
                 .error(error)
-                .fallback(fallback);
+                .fallback(fallback)
+                .loadingIndicator(loadingIndicator);
     }
 
     protected void shareCurrentImage(){
         int position = mGalleryView.getCurrentItemPosition();
         RequestOptions options = new RequestOptions()
                                     .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                                    .dontTransform();
+                                    .transform(mWatermarkTransformation);
 
         mGalleryView.getImagesAdapter().createGlideLoadable(position).loadIntoAsBitmap(GlideApp.with(this).asBitmap().apply(options)).into(new SimpleTarget<Bitmap>(){
             @Override
@@ -156,5 +121,50 @@ public class IGDetailActivity extends AppCompatActivity implements View.OnClickL
         }else if(id == R.id.ig_btn_share){
             shareCurrentImage();
         }
+    }
+
+    public static class IntentBuilder{
+        private final Bundle mExtras;
+
+        public IntentBuilder(){
+            mExtras = new Bundle();
+        }
+
+        public IntentBuilder withImageUris(String... uris){
+            mExtras.putStringArray(IGConstants.IMAGE_STRING_URIS_ARRAY_EXTRA_KEY, uris);
+            return this;
+        }
+
+        public IntentBuilder withImageResources(@DrawableRes int... imageResources){
+            mExtras.putIntArray(IGConstants.IMAGE_RESOURCES_ARRAY_EXTRA_KEY, imageResources);
+            return this;
+        }
+
+        public IntentBuilder withSharingWatermark(@DrawableRes int watermarkResource){
+            mExtras.putInt(IGConstants.SHARING_WATERMARK_RESOURCE_EXTRA_KEY, watermarkResource);
+            return this;
+        }
+
+        public IntentBuilder withPlaceholder(@DrawableRes int placeholderResource){
+            mExtras.putInt(IGConstants.PLACEHOLDER_RESOURCE_EXTRA_KEY, placeholderResource);
+            return this;
+        }
+
+        public IntentBuilder withErrorPlaceholder(@DrawableRes int errorPlaceholderResource){
+            mExtras.putInt(IGConstants.ERROR_PLACEHOLDER_RESOURCE_EXTRA_KEY, errorPlaceholderResource);
+            return this;
+        }
+
+        public IntentBuilder withLoadingIndicator(@DrawableRes int loadingIndicatorResource){
+            mExtras.putInt(IGConstants.LOADING_INDICATOR_RESOURCE_EXTRA_KEY, loadingIndicatorResource);
+            return this;
+        }
+
+        public Intent build(Context context){
+            Intent intent = new Intent(context, IGDetailActivity.class);
+            intent.putExtras(mExtras);
+            return intent;
+        }
+
     }
 }
