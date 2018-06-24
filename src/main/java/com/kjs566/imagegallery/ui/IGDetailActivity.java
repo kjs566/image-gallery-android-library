@@ -3,6 +3,7 @@ package com.kjs566.imagegallery.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -18,6 +20,7 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.kjs566.imagegallery.IGConstants;
 import com.kjs566.imagegallery.IGImageSharing;
+import com.kjs566.imagegallery.IGSaveBitmapAsyncTask;
 import com.kjs566.imagegallery.IGUtils;
 import com.kjs566.imagegallery.IGWatermarkTransformation;
 import com.kjs566.imagegallery.R;
@@ -98,7 +101,17 @@ public class IGDetailActivity extends AppCompatActivity implements View.OnClickL
                 if(mImageSharing == null){
                     mImageSharing = IGImageSharing.with(IGDetailActivity.this);
                 }
-                mImageSharing.saveAndShareImage(resource);
+                mImageSharing.saveImage(resource, new IGSaveBitmapAsyncTask.OnImageSavedListener() {
+                    @Override
+                    public void onImageSaved(Uri uri) {
+                        mImageSharing.shareImageUri(uri);
+                    }
+
+                    @Override
+                    public void onImageSavingFailed() {
+                        Toast.makeText(IGDetailActivity.this, "Couldn't save image for sharing, please check you storage space and try again.", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
     }

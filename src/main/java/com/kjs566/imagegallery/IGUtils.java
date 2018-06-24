@@ -8,6 +8,7 @@ public class IGUtils {
         return new IGRequestOptions()
                 .placeholder(R.drawable.ig_placeholder)
                 .error(R.drawable.ig_error)
-                .fallback(R.drawable.ig_fallback);
+                .fallback(R.drawable.ig_fallback)
+                .loadingIndicator(R.drawable.ig_loading_indicator);
     }
 }

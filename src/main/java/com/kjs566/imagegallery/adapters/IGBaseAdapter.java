@@ -34,5 +34,7 @@ public abstract class IGBaseAdapter extends RecyclerView.Adapter<IGDetailItemVie
         createGlideLoadable(position).loadInto(Glide.with(holder.itemView)).apply(mRequestOptions).into(holder.getImageView());
     }
 
+
+
     public abstract GlideLoadable createGlideLoadable(int itemPosition);
 }

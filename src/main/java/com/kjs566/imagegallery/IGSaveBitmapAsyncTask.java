@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
@@ -21,7 +22,7 @@ public class IGSaveBitmapAsyncTask extends AsyncTask<Bitmap, Void, Uri>{
     private WeakReference<OnImageSavedListener> mListener;
     private final File mFileToSave;
 
-    public IGSaveBitmapAsyncTask(Context context, File fileToSave, OnImageSavedListener listener){
+    public IGSaveBitmapAsyncTask(Context context, File fileToSave, @Nullable OnImageSavedListener listener){
         this.mContextReference = new WeakReference<>(context);
         this.mListener = new WeakReference<>(listener);
         this.mFileToSave = fileToSave;

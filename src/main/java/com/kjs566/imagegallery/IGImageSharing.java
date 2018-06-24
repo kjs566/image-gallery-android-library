@@ -41,7 +41,7 @@ public class IGImageSharing {
      * Saves the image as JPEG from async task and runs sharing
      * @param image Bitmap to save.
      */
-    public void saveAndShareImage(Bitmap image) {
+    public void saveImage(Bitmap image, @Nullable IGSaveBitmapAsyncTask.OnImageSavedListener listener) {
         if(image == null)
             return;
 
@@ -51,17 +51,8 @@ public class IGImageSharing {
         if(context == null){
             return;
         }
-        mSavingTask = new IGSaveBitmapAsyncTask(context, getFileForSharableImage(context), new IGSaveBitmapAsyncTask.OnImageSavedListener() {
-            @Override
-            public void onImageSaved(Uri uri) {
-                shareImageUri(uri);
-            }
 
-            @Override
-            public void onImageSavingFailed() {
-                //TODO
-            }
-        });
+        mSavingTask = new IGSaveBitmapAsyncTask(context, getFileForSharableImage(context), listener);
         mSavingTask.execute(image);
 
     }
