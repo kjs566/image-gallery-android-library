@@ -8,6 +8,7 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.kjs566.imagegallery.GlideLoadable;
+import com.kjs566.imagegallery.IGRequestOptions;
 import com.kjs566.imagegallery.ui.IGDetailItemViewHolder;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 public class IGUrisAdapter extends IGBaseAdapter {
     protected Uri[] mUrisArray;
 
-    public IGUrisAdapter(RequestOptions requestOptions) {
+    public IGUrisAdapter(IGRequestOptions requestOptions) {
         super(requestOptions);
     }
 

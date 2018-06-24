@@ -20,6 +20,7 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.kjs566.imagegallery.IGConstants;
 import com.kjs566.imagegallery.IGImageSharing;
+import com.kjs566.imagegallery.IGRequestOptions;
 import com.kjs566.imagegallery.IGSaveBitmapAsyncTask;
 import com.kjs566.imagegallery.IGUtils;
 import com.kjs566.imagegallery.IGWatermarkTransformation;
@@ -49,7 +50,7 @@ public class IGDetailActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.ig_btn_back).setOnClickListener(this);
         findViewById(R.id.ig_btn_share).setOnClickListener(this);
 
-        RequestOptions requestOptions = retrieveRequestOptions(getIntent());
+        IGRequestOptions requestOptions = retrieveRequestOptions(getIntent());
 
         final int[] resourcesArray = getIntent().getIntArrayExtra(IGConstants.IMAGE_RESOURCES_ARRAY_EXTRA_KEY);
         if(resourcesArray != null){
@@ -76,7 +77,7 @@ public class IGDetailActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    protected RequestOptions retrieveRequestOptions(Intent intent){
+    protected IGRequestOptions retrieveRequestOptions(Intent intent){
         @DrawableRes int placeholder = intent.getIntExtra(IGConstants.PLACEHOLDER_RESOURCE_EXTRA_KEY, R.drawable.ig_placeholder);
         @DrawableRes int error = intent.getIntExtra(IGConstants.ERROR_PLACEHOLDER_RESOURCE_EXTRA_KEY, R.drawable.ig_error);
         @DrawableRes int fallback = intent.getIntExtra(IGConstants.FALLBACK_RESOURCE_EXTRA_KEY, R.drawable.ig_fallback);

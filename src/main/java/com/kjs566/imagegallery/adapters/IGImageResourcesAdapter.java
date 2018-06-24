@@ -8,11 +8,12 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.kjs566.imagegallery.GlideLoadable;
+import com.kjs566.imagegallery.IGRequestOptions;
 
 public class IGImageResourcesAdapter extends IGBaseAdapter{
     @DrawableRes protected  int[] mResources;
 
-    public IGImageResourcesAdapter(RequestOptions requestOptions) {
+    public IGImageResourcesAdapter(IGRequestOptions requestOptions) {
         super(requestOptions);
     }
 

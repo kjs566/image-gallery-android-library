@@ -81,7 +81,7 @@ public class IGRequestOptions extends RequestOptions{
         return (IGRequestOptions) super.clone();
     }
 
-    public int getPlaceholderLoadingInt() {
+    public int getPlaceholderLoadingId() {
         return mLoadingRes;
     }
 

@@ -6,11 +6,12 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.kjs566.imagegallery.GlideLoadable;
+import com.kjs566.imagegallery.IGRequestOptions;
 
 public class IGStringUrisAdapter extends IGBaseAdapter{
     protected String[] mStringUris;
 
-    public IGStringUrisAdapter(RequestOptions requestOptions) {
+    public IGStringUrisAdapter(IGRequestOptions requestOptions) {
         super(requestOptions);
     }
 
