@@ -1,5 +1,3 @@
-//TODO JCENTER STATUS
-
 # Image Gallery Library for Android
 
 ## Highly customizable but easy to use image gallery library for Android.
@@ -16,10 +14,6 @@ It uses Recycler View for "paging" and Glide library for loading images.
 1. String URI
 2. Drawable resources
 3. Any other method supported in Glide - Bitmap, byte[], File - not out of a box, needs to implement own adapter extending IGBaseAdapter
-
-## Screenshots
-
-//TODO
 
 ## Demo Project
 Demo project with usage example can be found at:
